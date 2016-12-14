@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Active QRcode generator</title>
+  <style>
+    body {
+      text-align: center;
+    }
+    input {
+      margin: 5em auto;
+    }
+    #qrcode {
+      font-size: 0.01em;
+      line-height: 1em;
+    }
+  </style>
+</head>
+<body>
+  <input type="text" id="inputText" value="Type something...">
+  <div id="qrcode"></div>
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <script src="/js/qrcode.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      function drawQrcode (text) {
+        var qrcode = new QrCode(text)
+        var outputString = ''
+        qrcode.getData().forEach(function (row) {
+          row.forEach(function (cell) {
+            outputString += cell === 1 ? '█' : '　'
+          })
+          outputString += '<br/>'
+        })
+        document.getElementById('qrcode').innerHTML = outputString
+      }
+      $("#inputText").keyup(function () {
+        drawQrcode($("#inputText").val())
+      })
+      drawQrcode('Type something...')
+    })
+  </script>
+</body>
+</html>
