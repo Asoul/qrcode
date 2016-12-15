@@ -9,23 +9,47 @@
     body {
       text-align: center;
     }
-    input {
-      margin: 5em auto;
+    textarea {
+      margin: 3em auto;
+      height: 9em;
+      min-height: 8em;
+      max-height: 24em;
+      width: 50vw;
+      min-width: 20em;
+      border-radius: .28571429rem;
+      box-shadow: 0 0 0 0 transparent inset;
+      font-size: 1.3em;
+      line-height: 1.2857;
+      resize: none;
+      border: 1px solid rgba(34,36,38,.15);
+      padding: .78571429em 1em;
     }
     #qrcode {
-      font-size: 0.01em;
+      font-size: .01em;
       line-height: 1em;
+    }
+    .unselectable {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
   </style>
 </head>
 <body>
-  <input type="text" id="inputText" value="Type something...">
-  <div id="qrcode"></div>
+  <textarea id="inputText" placeholder="Type something..." autofocus></textarea>
+  <div id="qrcode" class="unselectable"></div>
   <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
   <script src="js/qrcode.min.js"></script>
   <script>
     $(document).ready(function () {
       function drawQrcode (text) {
+        if (text === '') {
+          document.getElementById('qrcode').innerHTML = ''
+          return
+        }
         var qrcode = new QrCode(text)
         var outputString = ''
         qrcode.getData().forEach(function (row) {
@@ -39,7 +63,6 @@
       $("#inputText").keyup(function () {
         drawQrcode($("#inputText").val())
       })
-      drawQrcode('Type something...')
     })
   </script>
 </body>
