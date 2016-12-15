@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="icon" href="img/favicon.png">
   <title>QRcode generator</title>
+  <link rel="icon" href="img/favicon.png">
+  <link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
   <style>
     body {
       text-align: center;
@@ -29,7 +30,7 @@
       font-size: .01em;
       line-height: 1em;
       cursor: pointer;
-      font-family: monospace;
+      font-family: "Space Mono";
     }
     .unselectable {
       -webkit-touch-callout: none;
@@ -74,7 +75,7 @@
       $("#qrcode").click(function () {
         var canvas = document.getElementById('hiddenCanvas')
         var ctx = canvas.getContext('2d')
-        ctx.font = "12px monospace"
+        ctx.font = "12px 'Space Mono'"
 
         // Draw qrcode to hidden canvas
         var CELL_HEIGHT = 12
