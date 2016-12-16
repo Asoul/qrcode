@@ -6,7 +6,6 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>QRcode generator</title>
   <link rel="icon" href="img/favicon.png">
-  <link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
   <style>
     body {
       text-align: center;
@@ -27,10 +26,9 @@
       padding: .78571429em 1em;
     }
     #qrcode {
-      font-size: .01em;
-      line-height: 1em;
       cursor: pointer;
-      font-family: "Space Mono";
+      display: block;
+      margin: 0 auto;
     }
     .unselectable {
       -webkit-touch-callout: none;
@@ -40,15 +38,11 @@
       -ms-user-select: none;
       user-select: none;
     }
-    .hidden {
-      display: none;
-    }
   </style>
 </head>
 <body>
   <textarea id="inputText" placeholder="Type something..." autofocus></textarea>
-  <div id="qrcode" class="unselectable"></div>
-  <canvas id="hiddenCanvas" class="hidden"></canvas>
+  <canvas id="qrcode" class="unselectable"></canvas>
   <a href="https://github.com/asoul/qrcode"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
   <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
   <script src="js/qrcode.min.js"></script>
@@ -60,34 +54,31 @@
           $('#qrcode').html('')
           return
         }
-        var qrcode = new QrCode(text)
-        var outputString = ''
+        var qrcode = new QrCode(text).getData()
 
-        // Draw qrcode using unicode charater
-        qrcode.getData().forEach(function (row) {
-          row.forEach(function (cell) {
-            outputString += cell === 1 ? '█' : '　'
-          })
-          outputString += '<br>'
-        })
-        $('#qrcode').html(outputString)
-      })
-      $("#qrcode").click(function () {
-        var canvas = document.getElementById('hiddenCanvas')
+        var canvas = document.getElementById('qrcode')
         var ctx = canvas.getContext('2d')
-        ctx.font = "12px 'Space Mono'"
 
-        // Draw qrcode to hidden canvas
+        // Set height and width
         var CELL_HEIGHT = 12
-        var lines = $('#qrcode').html().split('<br>')
-
-        var minWidth = (lines.length + 1) * CELL_HEIGHT
+        var minWidth = (qrcode.length + 1) * CELL_HEIGHT
         canvas.setAttribute('height', minWidth)
         canvas.setAttribute('width', minWidth)
 
-        lines.forEach(function (line, index) {
-          ctx.fillText(line, CELL_HEIGHT, (index + 2) * CELL_HEIGHT)
+        // Draw qrcode on canvas
+        qrcode.forEach(function (row, rowIdx) {
+          row.forEach(function (cell, cellIdx) {
+            if (cell === 1) {
+              ctx.fillRect(cellIdx * CELL_HEIGHT,
+                           rowIdx * CELL_HEIGHT,
+                           CELL_HEIGHT,
+                           CELL_HEIGHT)
+            }
+          })
         })
+      })
+      $("#qrcode").click(function () {
+        var canvas = document.getElementById('qrcode')
 
         // Create pseudo link to download
         var pseudoLink = document.createElement('a')
